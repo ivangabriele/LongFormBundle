@@ -6,6 +6,8 @@ This bundle provides an easy way to automatically generate form classes from a s
 * the Twig template (to be included or rendered in your own templates),
 * the Doctrine ORM Entity class.
 
+[![Build Status](https://travis-ci.org/InspiredBeings/IBLongFormBundle.svg?branch=master)](https://travis-ci.org/InspiredBeings/IBLongFormBundle)
+
 ---
 
 ## Installation
