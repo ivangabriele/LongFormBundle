@@ -151,7 +151,11 @@ class GenerateCommand extends ContainerAwareCommand
         // ------------------------------------------------------------------------------------------------------------------------------------
         // Form Type PHP file generation
 
-        $output->writeln("Generating form type class for form model \"" . $this->bundleName . ":" . $this->formModelName . "\"");
+        $output->writeln(array(
+            "",
+            "Generating form type class for form model \"" . $this->bundleName . ":" . $this->formModelName . "\""
+        ));
+
         $formTypeFileSource = $this->generateFormTypePHPSource();
         $formTypeFilePath = $this->bundlePath . '/Form/Type/' . $this->formModelName . 'Type.php';
 
@@ -173,15 +177,60 @@ class GenerateCommand extends ContainerAwareCommand
         $output->writeln("  > generating " . $formTypeFilePath);
         file_put_contents($formTypeFilePath, $formTypeFileSource);
 
+        // ------------------------------------------------------------------------------------------------------------------------------------
+        // Form template Twig file generation
+
+        $output->writeln(array(
+            "",
+            "Generating form Twig template for form model \"" . $this->bundleName . ":" . $this->formModelName . "\""
+        ));
+
+        $formTemplateFileSource = $this->generateTemplateTwigSource();
+        $formTemplateFilePath = $this->bundlePath . '/Resources/views/Form/' . $this->getContainer()->underscore($this->formModelName) . '.html.twig';
+
+        // If "Ressources/views/Form" directory doesn't exist, we create it
+        if (!file_exists($this->bundlePath . '/Resources/views/Form'))
+        {
+            $output->writeln("  > creating directory " . $this->bundlePath . "/Resources/views/Form");
+
+            if (!file_exists($this->bundlePath . '/Ressources'))
+            {
+                mkdir($this->bundlePath . '/Resources');
+            }
+
+            if (!file_exists($this->bundlePath . '/Ressources/views'))
+            {
+                mkdir($this->bundlePath . '/Resources/views');
+            }
+
+            mkdir($this->bundlePath . '/Resources/views/Form');
+        }
+
+        // If the form template already exists, we save a copy of it
+        if (file_exists($formTemplateFilePath))
+        {
+            $output->writeln("  > backing up " . $this->getContainer()->underscore($this->formModelName) . ".html.twig to " . $this->getContainer()->underscore($this->formModelName) . ".html.twig~");
+            copy($formTemplateFilePath, $formTemplateFilePath . '~');
+        }
+
+        // We write the (new) template for this form model
+        $output->writeln("  > generating " . $formTemplateFilePath);
+        file_put_contents($formTemplateFilePath, $formTemplateFileSource);
+
+        // ------------------------------------------------------------------------------------------------------------------------------------
+        // Entity PHP file generation
+
+        // Unless "no-entity" option is set
         if ($input->getOption('no-entity'))
         {
             exit();
         }
 
-        // ------------------------------------------------------------------------------------------------------------------------------------
-        // Entity PHP file generation
+        $output->writeln(array(
+            "",
+            "Generating entity class for form model \"" . $this->bundleName . ":" . $this->formModelName . "\""
+        ));
 
-        $output->writeln("Generating entity class for form model \"" . $this->bundleName . ":" . $this->formModelName . "\"");
         $entityFilePath = $this->bundlePath . '/Entity/' . $this->formModelName . '.php';
         $entityFileSource = $this->generateEntityPHPSource();
 
@@ -204,6 +253,8 @@ class GenerateCommand extends ContainerAwareCommand
         file_put_contents($entityFilePath, $entityFileSource);
 
         // We generate the entities for this entity (via Doctrine)
+        $output->writeln("");
+
         $command = $this->getApplication()->find('doctrine:generate:entities');
         $commandInput = new ArrayInput(array(
             'command' => 'doctrine:generate:entities',
@@ -214,6 +265,8 @@ class GenerateCommand extends ContainerAwareCommand
         // If shema update option is set to TRUE
         if ($input->getOption('schema-update'))
         {
+            $output->writeln("");
+
             // We generate the entities for this entity (via Doctrine)
             $command = $this->getApplication()->find('doctrine:schema:update');
             $commandInput = new ArrayInput(array(
@@ -310,6 +363,47 @@ class GenerateCommand extends ContainerAwareCommand
         $source .= "        return 'form_" . $this->getContainer()->underscore($this->formModelName) . "';" . "\n";
         $source .= "    }" . "\n";
         $source .= "}" . "\n";
+
+        return $source;
+    }
+
+    /**
+     * Generate Twig source code for the form template
+     *
+     * @return string The Twig source code
+     */
+    protected function generateTemplateTwigSource()
+    {
+        $source = "";
+
+        $source .= "{#" . "\n";
+        $source .= "    To customize your field blocks, check the Cookbook > How to Customize Form Rendering :" . "\n";
+        $source .= "    http://symfony.com/doc/current/cookbook/form/form_customization.html#form-theming" . "\n";
+        $source .= " #}" . "\n";
+        $source .= "\n";
+        $source .= "{# Form opening tag #}" . "\n";
+        $source .= "{{ form_start(form) }}" . "\n";
+        $source .= "\n";
+        $source .= "    {# Form general errors #}" . "\n";
+        $source .= "    {{ form_errors(form) }}" . "\n";
+        $source .= "\n";
+
+        foreach ($this->formModel as $fieldName => $fieldOptions)
+        {
+            if (isset($fieldOptions['type']) && $fieldOptions['type'] == 'hidden')
+            {
+                continue;
+            }
+
+            $source .= "    {{ form_row(form." . $fieldName . ") }}" . "\n";
+        }
+
+        $source .= "\n";
+        $source .= "    {# CSRF and hidden fields #}" . "\n";
+        $source .= "    {{ form_rest(form) }}" . "\n";
+        $source .= "\n";
+        $source .= "{# Form closing tag #}" . "\n";
+        $source .= "{{ form_end(form) }}" . "\n";
 
         return $source;
     }

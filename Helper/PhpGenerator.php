@@ -48,7 +48,7 @@ abstract class PhpGenerator
         {
             $source .= (($endOfLine === "\n") ? $spaces : "") . "'$option' => ";
 
-            if (is_array($value)) $source .= "[" . self::arrayToPhp($value, ++$tabulations, " ") . "]";
+            if (is_array($value)) $source .= "array(" . self::arrayToPhp($value, ++$tabulations, " ") . ")";
             elseif (is_bool($value)) $source .= ($value) ? "true" : "false";
             elseif (is_int($value) || is_float($value)) $source .= $value;
             else                                        $source .= "\"" . $value . "\"";

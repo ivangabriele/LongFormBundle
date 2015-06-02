@@ -17,20 +17,23 @@ branches:
 matrix:
     fast_finish: true
     include:
+        - php: 5.3
+          env: deps="low"
         - php: 5.5
-          env: SYMFONY_VERSION=2.3.* DB=mysql
+          env: SYMFONY_VERSION=2.3.*
         - php: 5.5
-          env: SYMFONY_VERSION=2.4.* DB=mysql
+          env: SYMFONY_VERSION=2.4.*
         - php: 5.5
-          env: SYMFONY_VERSION=2.5.* DB=mysql
+          env: SYMFONY_VERSION=2.5.*
         - php: 5.5
-          env: SYMFONY_VERSION=2.6.* DB=mysql
+          env: SYMFONY_VERSION=2.6.*
         - php: 5.5
-          env: SYMFONY_VERSION=2.7.* DB=mysql
+          env: SYMFONY_VERSION=2.7.*
         - php: 5.5
-          env: SYMFONY_VERSION=2.8.*@dev DB=mysql
+          env: SYMFONY_VERSION=2.8.*@dev TEST_GROUP=canFail
     allow_failures:
         - php: nightly
+        - env: TEST_GROUP=canFail
 
 before_script:
     - composer self-update
