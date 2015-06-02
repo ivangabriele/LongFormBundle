@@ -1,29 +1,39 @@
 {
-  "name": "inspired-beings/long-form-bundle",
-  "type": "symfony-bundle",
-  "description": "This bundle provides an easy way to generate long forms classes from a simple Yaml file: Symfony form types, Doctrine entities and Twig templates.",
-  "homepage": "http://www.inspired-beings.com",
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Ivan Gabriele",
-      "email": "ivan.gabriele@gmail.com",
-      "homepage": "http://www.ivangabriele.com"
+    "name": "inspired-beings/long-form-bundle",
+    "type": "symfony-bundle",
+    "description": "This bundle provides an easy way to generate long forms classes from a simple Yaml file: Symfony form types, Doctrine entities and Twig templates.",
+    "keywords": ["form"],
+    "homepage": "http://www.inspired-beings.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ivan Gabriele",
+            "email": "ivan.gabriele@gmail.com",
+            "homepage": "http://www.ivangabriele.com"
+        },
+        {
+            "name": "Inspired Beings",
+            "email": "contact@inspired-beings.com",
+            "homepage": "http://www.inspired-beings.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/framework-bundle": "~2.3",
+        "symfony/console": "~2.3",
+        "symfony/form": "~2.3.0,>=2.3.5",
+        "symfony/yaml": "~2.0,>=2.0.5"
     },
-    {
-      "name": "Inspired Beings",
-      "email": "contact@inspired-beings.com",
-      "homepage": "http://www.inspired-beings.com"
-    }
-  ],
-  "require": {
-    "php": ">=5.3.3",
-    "symfony/symfony": "~2.3"
-  },
-  "autoload": {
-    "psr-0": {
-      "InspiredBeings\\LongFormBundle": ""
-    }
-  },
-  "target-dir": "InspiredBeings/LongFormBundle"
+    "suggest": {
+        "doctrine/common": "~2.2",
+        "doctrine/dbal": "<2.5",
+        "doctrine/doctrine-bundle": "~1.2",
+        "doctrine/orm": "~2.2,>=2.2.3,<2.5"
+    },
+    "autoload": {
+        "psr-0": {
+            "InspiredBeings\\LongFormBundle": ""
+        }
+    },
+    "target-dir": "InspiredBeings/LongFormBundle"
 }
