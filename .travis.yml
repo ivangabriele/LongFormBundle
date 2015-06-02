@@ -5,9 +5,9 @@ php:
     - 5.4
     - 5.5
     - 5.6
+    - 7
     - hhvm
     - nightly
-    - hhvm-nightly
 
 branches:
     only:
@@ -17,30 +17,26 @@ branches:
 matrix:
     fast_finish: true
     include:
-        - php: 5.3
-          env: deps="low"
         - php: 5.5
-          env: SYMFONY_VERSION=2.3.*
+          env: SYMFONY_VERSION=2.3.* DB=mysql
         - php: 5.5
-          env: SYMFONY_VERSION=2.4.*
+          env: SYMFONY_VERSION=2.4.* DB=mysql
         - php: 5.5
-          env: SYMFONY_VERSION=2.5.*
+          env: SYMFONY_VERSION=2.5.* DB=mysql
         - php: 5.5
-          env: SYMFONY_VERSION=2.6.*
+          env: SYMFONY_VERSION=2.6.* DB=mysql
         - php: 5.5
-          env: SYMFONY_VERSION=2.7.*
+          env: SYMFONY_VERSION=2.7.* DB=mysql
         - php: 5.5
-          env: SYMFONY_VERSION=2.8.*@dev
+          env: SYMFONY_VERSION=2.8.*@dev DB=mysql
     allow_failures:
         - php: nightly
-        - php: hhvm-nightly
 
 before_script:
     # Dependencies
     - composer self-update
-    - if [ "$SYMFONY_VERSION" != "" ]; then composer require --dev --no-update symfony/symfony=$SYMFONY_VERSION; fi
-    - if [ "$deps" = "low" ]; then composer update --prefer-lowest; fi
-    - if [ "$deps" != "low" ]; then composer update --prefer-source; fi
+    - composer install
+    - composer require --dev --no-update symfony/symfony=$SYMFONY_VERSION;
 
     # Database
     - cp Tests/Mock/app/config/parameters.yml app/config/parameters.yml
