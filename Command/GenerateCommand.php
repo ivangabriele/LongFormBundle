@@ -459,17 +459,7 @@ class GenerateCommand extends ContainerAwareCommand
      * Convert a Symfony form field type into a Doctrine ORM annocation
      * for an entity property (to be converted as a column into the database)
      * 
-     * @todo Manage all these form field types :
-     *         - integer
-     *         - number
-     *         - percent
-     *         - choice
-     *         - entity
-     *         - timezone
-     *         - currency
-     *         - file
-     *         - radio
-     *         - collection
+     * @todo Manage all these form field types: integer, number, percent, choice, entity, timezone, currency, file, radio, collection.
      *
      * @param string $propertyName  The entity property name (in camelCase format !)
      * @param string $formFieldType The Symfony form type for the field regarding this property
