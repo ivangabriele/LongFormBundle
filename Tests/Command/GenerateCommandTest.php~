@@ -2,23 +2,16 @@
 
 namespace InspiredBeings\LongFormBundle\Tests\Command;
 
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
 use InspiredBeings\LongFormBundle\Command\GenerateCommand;
 
-class GenerateCommandTest extends KernelTestCase
+class GenerateCommandTest extends \PHPUnit_Framework_TestCase
 {
     public function testExecute()
     {
-        // -----------------------------------------------------------------------
-        // Boot kernel and load application
-
-        $kernel = $this->createKernel();
-        $kernel->boot();
-
-        $application = new Application($kernel);
+        $application = new Application();
 
         $application->add(new GenerateCommand());
 
@@ -31,7 +24,7 @@ class GenerateCommandTest extends KernelTestCase
             )
         );
 
-        exit(var_dump($commandTester->getDisplay()));
+        //exit(var_dump($commandTester->getDisplay()));
 
         $this->assertRegExp('/.../', $commandTester->getDisplay());
     }
