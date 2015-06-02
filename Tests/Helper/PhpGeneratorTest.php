@@ -9,12 +9,12 @@ class PhpGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testArrayToPhp()
     {
         $result = PhpGenerator::arrayToPhp(array(
-            'a' => [
+            'a' => array(
                 'b' => true,
                 'f' => 3.14,
                 'i' => 42,
                 's' => "Hello PhpGenerator !",
-            ],
+            ),
             'b' => true,
             'f' => 3.14,
             'i' => 42,

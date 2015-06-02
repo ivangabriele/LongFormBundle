@@ -284,7 +284,7 @@ class GenerateCommand extends ContainerAwareCommand
      */
     protected function generateFormTypePHPSource()
     {
-        $formModelDefaults = false;
+        $formModelDefaults = array();
 
         // If defaults array is set and contains some data
         if (isset($this->formModel['defaults']) && is_array($this->formModel['defaults']) && count($this->formModel['defaults']) !== 0)
@@ -339,7 +339,7 @@ class GenerateCommand extends ContainerAwareCommand
         $source .= "\n";
 
         // Setting form type defaults (if some are defined)
-        if ($formModelDefaults)
+        if (count($formModelDefaults) !== 0)
         {
             $source .= "    /**" . "\n";
             $source .= "     * @param OptionsResolver \$resolver" . "\n";
