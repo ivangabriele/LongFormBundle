@@ -10,6 +10,8 @@ This bundle provides an easy way to automatically generate form classes from a s
 [![Code Coverage](https://scrutinizer-ci.com/g/InspiredBeings/IBLongFormBundle/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/InspiredBeings/IBLongFormBundle/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/InspiredBeings/IBLongFormBundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/InspiredBeings/IBLongFormBundle/?branch=master)
 
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/ed43e7c8-502f-47ae-96db-18d295b573b8/big.png)](https://insight.sensiolabs.com/projects/ed43e7c8-502f-47ae-96db-18d295b573b8)
+
 ---
 
 ## Installation
