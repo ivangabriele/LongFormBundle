@@ -7,6 +7,7 @@ This bundle provides an easy way to automatically generate form classes from a s
 * the Doctrine ORM Entity class.
 
 [![Build Status](https://travis-ci.org/InspiredBeings/IBLongFormBundle.svg?branch=master)](https://travis-ci.org/InspiredBeings/IBLongFormBundle)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/InspiredBeings/IBLongFormBundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/InspiredBeings/IBLongFormBundle/?branch=master)
 
 ---
 

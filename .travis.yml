@@ -41,7 +41,11 @@ before_script:
     - if [ "$deps" = "low" ]; then composer update --prefer-lowest; fi
     - if [ "$deps" != "low" ]; then composer update --prefer-source; fi
 
-script: phpunit
+script: phpunit --coverage-clover=coverage.clover
+
+after_script:
+  - if [ "$TRAVIS_PHP_VERSION" != "nightly" ]; then wget https://scrutinizer-ci.com/ocular.phar; fi
+  - if [ "$TRAVIS_PHP_VERSION" != "nightly" ]; then php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi
 
 notifications:
     email: ivan.gabriele@gmail.com
