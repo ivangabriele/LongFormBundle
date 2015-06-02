@@ -11,8 +11,6 @@
 
 namespace InspiredBeings\LongFormBundle\Helper;
 
-use Doctrine\Common\Inflector\Inflector;
-
 /**
  * Pluralizer provides a help to get singular and plural forms of English words.
  *
@@ -70,7 +68,7 @@ abstract class Pluralizer
             return $value;
         }
 
-        $plural = Inflector::pluralize($value);
+        $plural = \Doctrine\Common\Inflector\Inflector::pluralize($value);
 
         return static::matchCase($plural, $value);
     }
@@ -109,7 +107,7 @@ abstract class Pluralizer
             return $value;
         }
 
-        $singular = Inflector::singularize($value);
+        $singular = \Doctrine\Common\Inflector\Inflector::singularize($value);
 
         return static::matchCase($singular, $value);
     }
