@@ -52,7 +52,6 @@ class PluralizerTest extends \PHPUnit_Framework_TestCase
         // Other words (including case)
         'CHERRY'       => 'CHERRIES',
         'Child'        => 'Children',
-        //'criterion'    => 'criteria',
         'cross'        => 'crosses',
         'customer'     => 'customers',
     );

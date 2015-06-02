@@ -35,7 +35,7 @@ abstract class PhpGenerator
      *
      * @return string The PHP source code
      */
-    static public function arrayToPhp($array, $tabulations = 4, $endOfLine = "\n")
+    public static function arrayToPhp($array, $tabulations = 4, $endOfLine = "\n")
     {
         $source = "";
         $spaces = "";
