@@ -1,0 +1,4 @@
+services:
+#    ib_long_form.example:
+#        class: InspiredBeings\LongFormBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
