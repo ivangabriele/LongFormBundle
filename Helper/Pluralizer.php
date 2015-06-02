@@ -60,16 +60,16 @@ abstract class Pluralizer
      * Get the plural form of an English word.
      *
      * @param  string $value
-     * @param  int    $count
      *
      * @return string
      */
-    public static function plural($value, $count = 2)
+    public static function plural($value)
     {
-        if ($count === 1 || static::uncountable($value))
+        if (static::uncountable($value))
         {
             return $value;
         }
+
         $plural = Inflector::pluralize($value);
 
         return static::matchCase($plural, $value);
@@ -78,7 +78,7 @@ abstract class Pluralizer
     /**
      * Get the plural form of an underscored variable name made of English words.
      *
-     * @param  string $value Underscored value
+     * @param  string $value
      *
      * @return string
      */
@@ -89,7 +89,7 @@ abstract class Pluralizer
 
         foreach ($words as $word)
         {
-            $pluralizedValue .= self::plural($word) . "_";
+            $pluralizedValue .= static::plural($word) . "_";
         }
 
         return substr($pluralizedValue, 0, strlen($pluralizedValue)-1);
@@ -104,6 +104,11 @@ abstract class Pluralizer
      */
     public static function singular($value)
     {
+        if (static::uncountable($value))
+        {
+            return $value;
+        }
+
         $singular = Inflector::singularize($value);
 
         return static::matchCase($singular, $value);

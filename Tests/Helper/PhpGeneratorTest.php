@@ -1,9 +1,24 @@
 <?php
 
+/*
+ * This file is part of the IBLongFormBundle package.
+ *
+ * (c) Inspired Beings Ltd <http://www.inspired-beings.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+
 namespace InspiredBeings\LongFormBundle\Tests\Helper;
 
 use InspiredBeings\LongFormBundle\Helper\PhpGenerator;
 
+/**
+ * Test Helper/PhpGenerator methods
+ *
+ * @author Ivan Gabriele <ivan.gabriele@gmail.com>
+ */
 class PhpGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     public function testArrayToPhp()
