@@ -1,0 +1,61 @@
+language: php
+
+php:
+    - 5.3
+    - 5.4
+    - 5.5
+    - 5.6
+    - hhvm
+    - nightly
+    - hhvm-nightly
+
+branches:
+    only:
+        - master
+        - /^\d+\.\d+\.\d+$/
+
+matrix:
+    fast_finish: true
+    include:
+        - php: 5.3
+          env: deps="low"
+        - php: 5.5
+          env: SYMFONY_VERSION=2.3.*
+        - php: 5.5
+          env: SYMFONY_VERSION=2.4.*
+        - php: 5.5
+          env: SYMFONY_VERSION=2.5.*
+        - php: 5.5
+          env: SYMFONY_VERSION=2.6.*
+        - php: 5.5
+          env: SYMFONY_VERSION=2.7.*
+        - php: 5.5
+          env: SYMFONY_VERSION=2.8.*@dev
+    allow_failures:
+        - php: hhvm
+        - php: hhvm-nightly
+
+before_script:
+    # Dependencies
+    - composer self-update
+    - if [ "$SYMFONY_VERSION" != "" ]; then composer require --dev --no-update symfony/symfony=$SYMFONY_VERSION; fi
+    - if [ "$deps" = "low" ]; then composer update --prefer-lowest; fi
+    - if [ "$deps" != "low" ]; then composer update --prefer-source; fi
+
+    # Database
+    - cp Mock/app/config/parameters.yml app/config/parameters.yml
+    - php app/console doctrine:database:create
+    - php app/console doctrine:schema:create
+
+    # Bundle
+    - php app/console generate:bundle --namespace InspiredBeings/TestBundle --bundle-name=TestBundle --dir=src --format=yml --no-interaction
+
+    # Form Model
+    - mkdir src/InspiredBeings/TestBundle/Form
+    - mkdir src/InspiredBeings/TestBundle/Form/Model
+    - cp Mock/src/InspiredBeings/TestBundle/Form/Model/StudentApplication.yml src/InspiredBeings/TestBundle/Form/Model/StudentApplication.yml
+
+script: phpunit -c app
+
+notifications:
+    email: ivan.gabriele@gmail.com

@@ -1,0 +1,13 @@
+parameters:
+    database_driver: pdo_mysql
+    database_host: localhost
+    database_port: null
+    database_name: test
+    database_user: root
+    database_password: null
+    mailer_transport: null
+    mailer_host: null
+    mailer_user: null
+    mailer_password: null
+    locale: en
+    secret: TestPassPhrase
