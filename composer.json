@@ -1,7 +1,7 @@
 {
   "name": "inspired-beings/long-form-bundle",
   "type": "symfony-bundle",
-  "description": "This bundle provides an easy way to generate long forms classes.",
+  "description": "This bundle provides an easy way to generate long forms classes from a simple Yaml file: Symfony form types, Doctrine entities and Twig templates.",
   "homepage": "http://www.inspired-beings.com",
   "license": "MIT",
   "authors": [
@@ -10,12 +10,18 @@
       "email": "ivan.gabriele@gmail.com",
       "homepage": "http://www.ivangabriele.com"
     }
+    {
+      "name": "Inspired Beings",
+      "email": "contact@inspired-beings.com",
+      "homepage": "http://www.inspired-beings.com"
+    }
   ],
   "require": {
     "php": ">=5.5",
     "symfony/symfony": ">=2.6",
-    "doctrine/orm": "~2.2,>=2.2.3",
-    "doctrine/doctrine-bundle": "~1.2"
+    "doctrine/doctrine-bundle": ">=1.5",
+    "symfony/console": ">=2.6",
+    "symfony/yaml": ">=2.6"
   },
   "autoload": {
     "psr-0": {

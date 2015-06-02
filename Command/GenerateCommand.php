@@ -18,6 +18,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use InspiredBeings\LongFormBundle\Helper\PhpGenerator;
 use InspiredBeings\LongFormBundle\Helper\Pluralizer;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Yaml\Exception\ParseException;
@@ -270,7 +271,7 @@ class GenerateCommand extends ContainerAwareCommand
             if (count($fieldOptions) !== 0)
             {
                 $source .= ", array(" . "\n";
-                $source .= $this->arrayToPhp($fieldOptions);
+                $source .= PhpGenerator::arrayToPhp($fieldOptions);
                 $source .= "            ))" . "\n";
 
                 continue;
@@ -294,7 +295,7 @@ class GenerateCommand extends ContainerAwareCommand
             $source .= "    {" . "\n";
             $source .= "        \$resolver->setDefaults(array(" . "\n";
 
-            $source .= $this->arrayToPhp($formModelDefaults, 3);
+            $source .= PhpGenerator::arrayToPhp($formModelDefaults, 3);
 
             $source .= "        ));" . "\n";
             $source .= "    }" . "\n";
@@ -365,39 +366,6 @@ class GenerateCommand extends ContainerAwareCommand
         }
 
         $source .= "}" . "\n";
-
-        return $source;
-    }
-
-    /**
-     * Recursive function converting an array value into arrays written in PHP source code
-     *
-     * @param array  $array       The array to be converted
-     * @param int    $tabulations Numbers of tabulation to indent the code with
-     * @param string $endOfLine   Ends of line for code formatting
-     *
-     * @return string The PHP source code
-     */
-    protected function arrayToPhp($array, $tabulations = 4, $endOfLine = "\n")
-    {
-        $source = "";
-        $spaces = "";
-        for ($index = 0; $index < $tabulations; $index++)
-        {
-            $spaces .= "    ";
-        }
-
-        foreach ($array as $option => $value)
-        {
-            $source .= (($endOfLine === "\n") ? $spaces : "") . "'$option' => ";
-
-            if (is_array($value)) $source .= "[" . $this->arrayToPhp($value, ++$tabulations, " ") . "]";
-            elseif (is_bool($value)) $source .= ($value) ? "true" : "false";
-            elseif (is_int($value) || is_float($value)) $source .= $value;
-            else                                        $source .= "\"" . $value . "\"";
-
-            $source .= "," . $endOfLine;
-        }
 
         return $source;
     }

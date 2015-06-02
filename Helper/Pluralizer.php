@@ -7,8 +7,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @see https://github.com/laravel/framework/blob/5.0/src/Illuminate/Support/Pluralizer.php
  */
 
 namespace InspiredBeings\LongFormBundle\Helper;
@@ -17,8 +15,9 @@ use Doctrine\Common\Inflector\Inflector;
 
 /**
  * Pluralizer provides a help to get singular and plural forms of English words.
- * Contains new methods to the Laravel original code :
- *  - Pluralizer::
+ *
+ * Additional method (in comparison to the Laravel original code) :
+ *  - Pluralizer::pluralUnderscore($value) : pluralize underscored variables name
  *
  * @see https://github.com/laravel/framework/blob/5.0/src/Illuminate/Support/Pluralizer.php
  *
