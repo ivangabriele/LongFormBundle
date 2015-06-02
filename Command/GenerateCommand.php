@@ -82,10 +82,10 @@ class GenerateCommand extends ContainerAwareCommand
         // If the form model path format is correct (Foo:Bar)
         if (count($formModelPath) !== 2)
         {
-            exit($output->writeln(array(
+            $output->writeln(array(
                 "<error>Wrong format for your form model path !</error>",
                 "Example: <info>php app/console generate:form MyBundle:MyForm</info>"
-            )));
+            ));
         }
 
         // We get the bundle name and the form model name
@@ -100,7 +100,7 @@ class GenerateCommand extends ContainerAwareCommand
         }
         catch (\InvalidArgumentException $exception)
         {
-            exit($output->writeln("<error>" . $exception->getMessage() . "</error>"));
+            $output->writeln("<error>" . $exception->getMessage() . "</error>");
         }
 
         // We get the bundle name and the form model name
@@ -110,19 +110,19 @@ class GenerateCommand extends ContainerAwareCommand
         // If the form model name does not only contain letters
         if (!ctype_alpha($this->formModelName))
         {
-            exit($output->writeln(array(
+            $output->writeln(array(
                 "<error>Your form model name must only contain letters.</error>",
                 "<info>Example: if your yaml filename is MyForm.yml (within Form/Model/ directory), the form model path will be " . $this->bundleName . ":MyForm.</info>"
-            )));
+            ));
         }
 
         // If the first letter is not a capital one
         if (ucfirst($this->formModelName) !== $this->formModelName)
         {
-            exit($output->writeln(array(
+            $output->writeln(array(
                 "<error>Your form model name must respect Pacal Case format (each word starts with a capital letter).</error>",
                 "<info>Maybe " . $this->bundleName . ":" . ucfirst($this->formModelName) . " ?</info>"
-            )));
+            ));
         }
 
         // We set the form model yaml file absolute path
@@ -131,10 +131,10 @@ class GenerateCommand extends ContainerAwareCommand
         // If form model yaml file exists
         if (!file_exists($formModelPath))
         {
-            exit($output->writeln(array(
+            $output->writeln(array(
                 "<error>We didn't find your yaml file !</error>",
                 "<question>Is " . $this->formModelName . ".yml within the Form/Model/ directory of your bundle " . $this->bundleName . " ?</question>"
-            )));
+            ));
         }
 
         // We try to get the yaml source
@@ -145,7 +145,7 @@ class GenerateCommand extends ContainerAwareCommand
         }
         catch (ParseException $exception)
         {
-            exit($output->writeln("<error>" . $exception->getMessage() . "</error>"));
+            $output->writeln("<error>" . $exception->getMessage() . "</error>");
         }
 
         // ------------------------------------------------------------------------------------------------------------------------------------
@@ -220,47 +220,45 @@ class GenerateCommand extends ContainerAwareCommand
         // ------------------------------------------------------------------------------------------------------------------------------------
         // Entity PHP file generation
 
-        // Unless "no-entity" option is set
-        if ($input->getOption('no-entity'))
+        // If the "no-entity" option is not set
+        if (!$input->getOption('no-entity'))
         {
-            exit();
+            $output->writeln(array(
+                "",
+                "Generating entity class for form model \"" . $this->bundleName . ":" . $this->formModelName . "\""
+            ));
+
+            $entityFilePath = $this->bundlePath . '/Entity/' . $this->formModelName . '.php';
+            $entityFileSource = $this->generateEntityPHPSource();
+
+            // If "Entity" directory doesn't exist, we create it
+            if (!file_exists($this->bundlePath . '/Entity'))
+            {
+                $output->writeln("  > creating directory " . $this->bundlePath . "/Entity");
+                mkdir($this->bundlePath . '/Entity');
+            }
+
+            // If the entity already exists, we save a copy of it
+            if (file_exists($entityFilePath))
+            {
+                $output->writeln("  > backing up " . $this->formModelName . ".php to " . $this->formModelName . ".php~");
+                copy($entityFilePath, $entityFilePath . '~');
+            }
+
+            // We write the (new) entity for this form model
+            $output->writeln("  > generating " . $entityFilePath);
+            file_put_contents($entityFilePath, $entityFileSource);
+
+            // We generate the entities for this entity (via Doctrine)
+            $output->writeln("");
+
+            $command = $this->getApplication()->find('doctrine:generate:entities');
+            $commandInput = new ArrayInput(array(
+                'command' => 'doctrine:generate:entities',
+                'name' => $this->bundleName . ':' . $this->formModelName
+            ));
+            $command->run($commandInput, $output);
         }
-
-        $output->writeln(array(
-            "",
-            "Generating entity class for form model \"" . $this->bundleName . ":" . $this->formModelName . "\""
-        ));
-
-        $entityFilePath = $this->bundlePath . '/Entity/' . $this->formModelName . '.php';
-        $entityFileSource = $this->generateEntityPHPSource();
-
-        // If "Entity" directory doesn't exist, we create it
-        if (!file_exists($this->bundlePath . '/Entity'))
-        {
-            $output->writeln("  > creating directory " . $this->bundlePath . "/Entity");
-            mkdir($this->bundlePath . '/Entity');
-        }
-
-        // If the entity already exists, we save a copy of it
-        if (file_exists($entityFilePath))
-        {
-            $output->writeln("  > backing up " . $this->formModelName . ".php to " . $this->formModelName . ".php~");
-            copy($entityFilePath, $entityFilePath . '~');
-        }
-
-        // We write the (new) entity for this form model
-        $output->writeln("  > generating " . $entityFilePath);
-        file_put_contents($entityFilePath, $entityFileSource);
-
-        // We generate the entities for this entity (via Doctrine)
-        $output->writeln("");
-
-        $command = $this->getApplication()->find('doctrine:generate:entities');
-        $commandInput = new ArrayInput(array(
-            'command' => 'doctrine:generate:entities',
-            'name' => $this->bundleName . ':' . $this->formModelName
-        ));
-        $command->run($commandInput, $output);
 
         // If shema update option is set to TRUE
         if ($input->getOption('schema-update'))
