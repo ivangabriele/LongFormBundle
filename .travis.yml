@@ -43,7 +43,7 @@ before_script:
     - if [ "$deps" != "low" ]; then composer update --prefer-source; fi
 
     # Database
-    - cp Mock/app/config/parameters.yml app/config/parameters.yml
+    - cp Tests/Mock/app/config/parameters.yml app/config/parameters.yml
     - php app/console doctrine:database:create
     - php app/console doctrine:schema:create
 
@@ -53,7 +53,7 @@ before_script:
     # Form Model
     - mkdir src/InspiredBeings/TestBundle/Form
     - mkdir src/InspiredBeings/TestBundle/Form/Model
-    - cp Mock/src/InspiredBeings/TestBundle/Form/Model/StudentApplication.yml src/InspiredBeings/TestBundle/Form/Model/StudentApplication.yml
+    - cp Tests/Mock/src/InspiredBeings/TestBundle/Form/Model/StudentApplication.yml src/InspiredBeings/TestBundle/Form/Model/StudentApplication.yml
 
 script: phpunit -c app
 
