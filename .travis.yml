@@ -36,7 +36,7 @@ before_script:
     # Dependencies
     - composer self-update
     - composer install
-    - composer require --dev --no-update symfony/symfony=$SYMFONY_VERSION;
+    - if [ "$SYMFONY_VERSION" != "" ]; then composer require --dev --no-update symfony/symfony=$SYMFONY_VERSION; fi
 
     # Database
     - cp Tests/Mock/app/config/parameters.yml app/config/parameters.yml
