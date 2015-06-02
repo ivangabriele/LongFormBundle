@@ -412,14 +412,12 @@ class GenerateCommand extends ContainerAwareCommand
      */
     protected function generateEntityPHPSource()
     {
-        $source = "";
+        $source = "<?php" . "\n\n";
 
-        $source .= "<?php" . "\n";
-        $source .= "\n";
-        $source .= "namespace " . $this->bundleNameSpace . "\\Entity;" . "\n";
-        $source .= "\n";
-        $source .= "use Doctrine\\ORM\\Mapping as ORM;" . "\n";
-        $source .= "\n";
+        $source .= "namespace " . $this->bundleNameSpace . "\\Entity;" . "\n\n";
+
+        $source .= "use Doctrine\\ORM\\Mapping as ORM;" . "\n\n";
+
         $source .= "/**" . "\n";
         $source .= " * " . $this->formModelName . "\n";
         $source .= " *" . "\n";
@@ -435,25 +433,21 @@ class GenerateCommand extends ContainerAwareCommand
         $source .= "     * @ORM\\Id" . "\n";
         $source .= "     * @ORM\\GeneratedValue(strategy=\"AUTO\")" . "\n";
         $source .= "     */" . "\n";
-        $source .= "    private \$id;" . "\n";
+        $source .= "    private \$id;" . "\n\n";
 
         foreach ($this->formModel as $fieldName => $fieldOptions)
         {
-            if (
-                isset($fieldOptions['type'])
-                && ($fieldOptions['type'] == 'button' || $fieldOptions['type'] == 'hidden' || $fieldOptions['type'] == 'reset' || $fieldOptions['type'] == 'submit')
-            )
+            if (isset($fieldOptions['type']) && in_array($fieldOptions['type'], array('button', 'hidden', 'reset', 'submit')))
             {
                 continue;
             }
 
-            $source .= "\n";
             $source .= "    /**" . "\n";
             $source .= "     * @var string" . "\n";
             $source .= "     *" . "\n";
             $source .= "     * " . $this->formTypeToDoctrineORMType( $fieldName, isset($fieldOptions['type']) ? $fieldOptions['type'] : 'string' ) . "\n";
             $source .= "     */" . "\n";
-            $source .= "    private \$" . $fieldName . ";" . "\n";
+            $source .= "    private \$" . $fieldName . ";" . "\n\n";
         }
 
         $source .= "}" . "\n";
