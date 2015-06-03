@@ -9,13 +9,12 @@
  * file that was distributed with this source code.
  */
 
-
 namespace InspiredBeings\LongFormBundle\Tests\Helper;
 
 use InspiredBeings\LongFormBundle\Helper\PhpGenerator;
 
 /**
- * Test Helper/PhpGenerator methods
+ * Test Helper/PhpGenerator methods.
  *
  * @author Ivan Gabriele <ivan.gabriele@gmail.com>
  */
@@ -28,13 +27,13 @@ class PhpGeneratorTest extends \PHPUnit_Framework_TestCase
                 'b' => true,
                 'f' => 3.14,
                 'i' => 42,
-                's' => "Hello PhpGenerator !",
+                's' => 'Hello PhpGenerator !',
             ),
             'b' => true,
             'f' => 3.14,
             'i' => 42,
-            's' => "Hello PhpGenerator !",
-        ), 0, "_EOF_");
+            's' => 'Hello PhpGenerator !',
+        ), 0, '_EOF_');
 
         // assert that your calculator added the numbers correctly!
         $this->assertEquals(

@@ -57,14 +57,13 @@ abstract class Pluralizer
     /**
      * Get the plural form of an English word.
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return string
      */
     public static function plural($value)
     {
-        if (static::uncountable($value))
-        {
+        if (static::uncountable($value)) {
             return $value;
         }
 
@@ -76,34 +75,32 @@ abstract class Pluralizer
     /**
      * Get the plural form of an underscored variable name made of English words.
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return string
      */
     public static function pluralUnderscore($value)
     {
-        $words = explode("_", $value);
-        $pluralizedValue = "";
+        $words = explode('_', $value);
+        $pluralizedValue = '';
 
-        foreach ($words as $word)
-        {
-            $pluralizedValue .= static::plural($word) . "_";
+        foreach ($words as $word) {
+            $pluralizedValue .= static::plural($word).'_';
         }
 
-        return substr($pluralizedValue, 0, strlen($pluralizedValue)-1);
+        return substr($pluralizedValue, 0, strlen($pluralizedValue) - 1);
     }
 
     /**
      * Get the singular form of an English word.
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return string
      */
     public static function singular($value)
     {
-        if (static::uncountable($value))
-        {
+        if (static::uncountable($value)) {
             return $value;
         }
 
@@ -115,7 +112,7 @@ abstract class Pluralizer
     /**
      * Determine if the given value is uncountable.
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return bool
      */
@@ -127,18 +124,16 @@ abstract class Pluralizer
     /**
      * Attempt to match the case on two strings.
      *
-     * @param  string $value
-     * @param  string $comparison
+     * @param string $value
+     * @param string $comparison
      *
      * @return string
      */
     protected static function matchCase($value, $comparison)
     {
         $functions = array('mb_strtolower', 'mb_strtoupper', 'ucfirst', 'ucwords');
-        foreach ($functions as $function)
-        {
-            if (call_user_func($function, $comparison) === $comparison)
-            {
+        foreach ($functions as $function) {
+            if (call_user_func($function, $comparison) === $comparison) {
                 return call_user_func($function, $value);
             }
         }
