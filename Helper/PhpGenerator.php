@@ -35,8 +35,8 @@ abstract class PhpGenerator
             $spaces .= '    ';
         }
 
-        foreach ($array as $option => $value) {
-            $source .= (($endOfLine === "\n") ? $spaces : '')."'$option' => ";
+        foreach ($array as $key => $value) {
+            $source .= (($endOfLine === "\n") ? $spaces : '')."'$key' => ";
 
             switch (gettype($value)) {
                 case 'array':
