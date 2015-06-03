@@ -12,11 +12,7 @@
 namespace InspiredBeings\LongFormBundle\Helper;
 
 /**
- * Pluralizer provides a help to get singular and plural forms of English words.
- * Contains new methods to the Laravel original code :
- *  - Pluralizer::.
- *
- * @see https://github.com/laravel/framework/blob/5.0/src/Illuminate/Support/Pluralizer.php
+ * PhpGenerator provides a help to generate PHP source code.
  *
  * @author Ivan Gabriele <ivan.gabriele@gmail.com>
  */
