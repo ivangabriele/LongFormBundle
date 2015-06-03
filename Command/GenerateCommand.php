@@ -459,8 +459,6 @@ class GenerateCommand extends ContainerAwareCommand
      * Convert a Symfony form field type into a Doctrine ORM annocation
      * for an entity property (to be converted as a column into the database)
      * 
-     * @todo Manage all these form field types: integer, number, percent, choice, entity, timezone, currency, file, radio, collection.
-     *
      * @param string $propertyName  The entity property name (in camelCase format !)
      * @param string $formFieldType The Symfony form type for the field regarding this property
      *
@@ -485,8 +483,17 @@ class GenerateCommand extends ContainerAwareCommand
                 $annotation .= "type=\"datetime\", nullable=true";
                 break;
 
+            case 'integer':
+                $annotation .= "type=\"integer\", nullable=true";
+                break;
+
             case 'money':
+            case 'percent':
                 $annotation .= "type=\"decimal\", precision=13, scale=2, nullable=true";
+                break;
+
+            case 'number':
+                $annotation .= "type=\"decimal\", precision=21, scale=10, nullable=true";
                 break;
 
             case 'textarea':
@@ -497,7 +504,11 @@ class GenerateCommand extends ContainerAwareCommand
                 $annotation .= "type=\"time\", nullable=true";
                 break;
 
-            // country, email, language, locale, password, repeated, search, text, url
+            case 'choice':
+                $annotation .= "type=\"array\"";
+                break;
+
+            // country, currency, email, language, locale, password, radio, repeated, search, text, timezone, url AND entity, file, collection
             default:
                 $annotation .= "type=\"string\", length=255, nullable=true";
                 break;

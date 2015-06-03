@@ -7,8 +7,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @see https://github.com/laravel/framework/blob/5.0/src/Illuminate/Support/Pluralizer.php
  */
 
 namespace InspiredBeings\LongFormBundle\Helper;
@@ -48,10 +46,25 @@ abstract class PhpGenerator
         {
             $source .= (($endOfLine === "\n") ? $spaces : "") . "'$option' => ";
 
-            if (is_array($value)) $source .= "array(" . self::arrayToPhp($value, ++$tabulations, " ") . ")";
-            elseif (is_bool($value)) $source .= ($value) ? "true" : "false";
-            elseif (is_int($value) || is_float($value)) $source .= $value;
-            else                                        $source .= "\"" . $value . "\"";
+            switch (gettype($value))
+            {
+                case 'array':
+                    $source .= "array(" . self::arrayToPhp($value, ++$tabulations, " ") . ")";
+                    break;
+                    
+                case 'boolean':
+                    $source .= $value ? "true" : "false";
+                    break;
+                    
+                case 'double': // float
+                case 'integer':
+                    $source .= $value;
+                    break;
+
+                case 'string':
+                    $source .= "\"" . $value . "\"";
+                    break;
+            }
 
             $source .= "," . $endOfLine;
         }
