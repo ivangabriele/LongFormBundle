@@ -35,7 +35,8 @@ abstract class PhpGenerator
             $spaces .= '    ';
         }
 
-        foreach ($array as $key => $value) {
+        foreach ($array as $key => $value)
+        {
             $source .= (($endOfLine === "\n") ? $spaces : '')."'$key' => ";
 
             switch (gettype($value)) {
@@ -50,6 +51,10 @@ abstract class PhpGenerator
                 case 'double': // float
                 case 'integer':
                     $source .= $value;
+                    break;
+
+                case 'NULL':
+                    $source .= 'null';
                     break;
 
                 case 'string':
