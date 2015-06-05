@@ -97,51 +97,38 @@ defaults:
 # @see http://symfony.com/doc/current/reference/forms/types.html
 # 
 studentCivility:
+    type: choice
     label: "Civility"
     required: true
-    type: choice
     choices:
         'Mr': 'Mister'
         'Ms': 'Miss'
     expanded: true
-    label_attr: { class: 'required' }
 studentFirstName:
     label: "First Name"
     required: true
-    label_attr: { class: 'required' }
 studentLastName:
     label: "Last Name"
     required: true
-    label_attr: { class: 'required' }
 studentBirthDate:
     label: "Birth Date"
     type: birthday
-    required: true
-    label_attr: { class: 'required' }
 studentAddress:
     label: "Adress 1"
-    required: true
-    label_attr: { class: 'required' }
 studentAddressBis:
     label: "Adress 2"
 studentZipCode:
     label: "Zip Code"
-    required: true
-    label_attr: { class: 'required' }
 studentCity:
     label: "City"
-    required: true
-    label_attr: { class: 'required' }
 studentCountry:
-    label: "Country"
     type: country
+    label: "Country"
     data: "US"
-    empty_value: null
 studentEmail:
-    label: "Email"
     type: email
+    label: "Email"
     required: true
-    label_attr: { class: 'required' }
 studentPhone:
     label: "Phone"
 
