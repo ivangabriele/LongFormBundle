@@ -237,16 +237,14 @@ class GenerateCommand extends ContainerAwareCommand
             unset($this->formModel['defaults']);
         }
         
-        $source = '';
+        $source = '<?php' . "\n\n";
         
-        $source .= '<?php' . "\n";
-        $source .= "\n";
-        $source .= 'namespace ' . $this->bundleNameSpace . '\\Form\\Type;' . "\n";
-        $source .= "\n";
+        $source .= 'namespace ' . $this->bundleNameSpace . '\\Form\\Type;' . "\n\n";
+
         $source .= 'use Symfony\\Component\\Form\\AbstractType;' . "\n";
         $source .= 'use Symfony\\Component\\Form\\FormBuilderInterface;' . "\n";
-        $source .= 'use Symfony\\Component\\OptionsResolver\\OptionsResolver;' . "\n";
-        $source .= "\n";
+        $source .= 'use Symfony\\Component\\OptionsResolver\\OptionsResolver;' . "\n\n";
+
         $source .= 'class ' . $this->formModelName . 'Type extends AbstractType' . "\n";
         $source .= '{' . "\n";
 
@@ -396,14 +394,14 @@ class GenerateCommand extends ContainerAwareCommand
         $source .= '{#' . "\n";
         $source .= '    To customize your field blocks, check the Cookbook > How to Customize Form Rendering :' . "\n";
         $source .= '    http://symfony.com/doc/current/cookbook/form/form_customization.html#form-theming' . "\n";
-        $source .= ' #}' . "\n";
-        $source .= "\n";
+        $source .= ' #}' . "\n\n";
+
         $source .= '{# Form opening tag #}' . "\n";
-        $source .= '{{ form_start(form) }}' . "\n";
-        $source .= "\n";
+        $source .= '{{ form_start(form) }}' . "\n\n";
+
         $source .= '    {# Form general errors #}' . "\n";
-        $source .= '    {{ form_errors(form) }}' . "\n";
-        $source .= "\n";
+        $source .= '    {{ form_errors(form) }}' . "\n\n";
+
         
         foreach ($this->formModel as $fieldName => $fieldOptions)
         {
@@ -417,8 +415,8 @@ class GenerateCommand extends ContainerAwareCommand
         
         $source .= "\n";
         $source .= '    {# CSRF and hidden fields #}' . "\n";
-        $source .= '    {{ form_rest(form) }}' . "\n";
-        $source .= "\n";
+        $source .= '    {{ form_rest(form) }}' . "\n\n";
+
         $source .= '{# Form closing tag #}' . "\n";
         $source .= '{{ form_end(form) }}' . "\n";
         
@@ -468,7 +466,7 @@ class GenerateCommand extends ContainerAwareCommand
     }
     
     /**
-     * Generate PHP source code for the entity.
+     * Generate the PHP source code for the entity.
      *
      * @return string The PHP source code
      */
@@ -496,7 +494,23 @@ class GenerateCommand extends ContainerAwareCommand
         $source .= '     * @ORM\\GeneratedValue(strategy="AUTO")' . "\n";
         $source .= '     */' . "\n";
         $source .= "    private \$id;" . "\n\n";
+
+        $source .= $this->generateEntityPropertiesPhpSource();
         
+        $source .= '}' . "\n";
+        
+        return $source;
+    }
+    
+    /**
+     * Generate the PHP source code for the entity properties.
+     *
+     * @return string The PHP source code
+     */
+    protected function generateEntityPropertiesPhpSource()
+    {
+        $source = '';
+
         foreach ($this->formModel as $fieldName => $fieldOptions)
         {
             if (isset($fieldOptions['type']) && in_array($fieldOptions['type'], array('button', 'hidden', 'reset', 'submit')))
@@ -511,9 +525,7 @@ class GenerateCommand extends ContainerAwareCommand
             $source .= '     */' . "\n";
             $source .= "    private \$" . $fieldName . ';' . "\n\n";
         }
-        
-        $source .= '}' . "\n";
-        
+
         return $source;
     }
     
