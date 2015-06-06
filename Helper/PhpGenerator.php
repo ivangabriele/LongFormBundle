@@ -31,17 +31,19 @@ abstract class PhpGenerator
     {
         $source = '';
         $spaces = '';
-        for ($index = 0; $index < $tabulations; $index++) {
+        for ($index = 0; $index < $tabulations; $index++)
+        {
             $spaces .= '    ';
         }
 
         foreach ($array as $key => $value)
         {
-            $source .= (($endOfLine === "\n") ? $spaces : '')."'$key' => ";
+            $source .= (($endOfLine === "\n") ? $spaces : '') . "'$key' => ";
 
-            switch (gettype($value)) {
+            switch (gettype($value))
+            {
                 case 'array':
-                    $source .= 'array('.self::arrayToPhp($value, ++$tabulations, ' ').')';
+                    $source .= 'array(' . self::arrayToPhp($value, ++$tabulations, ' ') . ')';
                     break;
 
                 case 'boolean':
@@ -58,11 +60,11 @@ abstract class PhpGenerator
                     break;
 
                 case 'string':
-                    $source .= '"'.$value.'"';
+                    $source .= '"' . $value . '"';
                     break;
             }
 
-            $source .= ','.$endOfLine;
+            $source .= ',' . $endOfLine;
         }
 
         return $source;

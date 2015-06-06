@@ -17,7 +17,7 @@ namespace InspiredBeings\LongFormBundle\Helper;
  * Additional method (in comparison to the Laravel original code) :
  *  - Pluralizer::pluralUnderscore($value) : pluralize underscored variables name
  *
- * @see https://github.com/laravel/framework/blob/5.0/src/Illuminate/Support/Pluralizer.php
+ * @see    https://github.com/laravel/framework/blob/5.0/src/Illuminate/Support/Pluralizer.php
  *
  * @author Ivan Gabriele <ivan.gabriele@gmail.com>
  */
@@ -63,7 +63,8 @@ abstract class Pluralizer
      */
     public static function plural($value)
     {
-        if (static::uncountable($value)) {
+        if (static::uncountable($value))
+        {
             return $value;
         }
 
@@ -84,8 +85,9 @@ abstract class Pluralizer
         $words = explode('_', $value);
         $pluralizedValue = '';
 
-        foreach ($words as $word) {
-            $pluralizedValue .= static::plural($word).'_';
+        foreach ($words as $word)
+        {
+            $pluralizedValue .= static::plural($word) . '_';
         }
 
         return substr($pluralizedValue, 0, strlen($pluralizedValue) - 1);
@@ -100,7 +102,8 @@ abstract class Pluralizer
      */
     public static function singular($value)
     {
-        if (static::uncountable($value)) {
+        if (static::uncountable($value))
+        {
             return $value;
         }
 
@@ -132,8 +135,10 @@ abstract class Pluralizer
     protected static function matchCase($value, $comparison)
     {
         $functions = array('mb_strtolower', 'mb_strtoupper', 'ucfirst', 'ucwords');
-        foreach ($functions as $function) {
-            if (call_user_func($function, $comparison) === $comparison) {
+        foreach ($functions as $function)
+        {
+            if (call_user_func($function, $comparison) === $comparison)
+            {
                 return call_user_func($function, $value);
             }
         }
