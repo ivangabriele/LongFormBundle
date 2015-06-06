@@ -199,7 +199,7 @@ class GenerateCommand extends ContainerAwareCommand
             'Generating form type class for form model "' . $this->bundleName . ':' . $this->formModelName . '"',
         ));
 
-        $formTypeFileSource = $this->generateFormTypePHPSource();
+        $formTypeFileSource = $this->generateFormTypePhpSource();
         $formTypeFilePath = $this->bundlePath . '/Form/Type/' . $this->formModelName . 'Type.php';
 
         // If "Form/Type" directory doesn't exist, we create it
@@ -226,7 +226,7 @@ class GenerateCommand extends ContainerAwareCommand
      *
      * @return string The PHP source code
      */
-    protected function generateFormTypePHPSource()
+    protected function generateFormTypePhpSource()
     {
         $formModelDefaults = array();
         
@@ -249,6 +249,38 @@ class GenerateCommand extends ContainerAwareCommand
         $source .= "\n";
         $source .= 'class ' . $this->formModelName . 'Type extends AbstractType' . "\n";
         $source .= '{' . "\n";
+
+        // We concatenate the form builder method source code
+        $source .= $this->generateFormTypeBuilderPhpSource() . "\n";
+
+        // If "defaults" are defined and contains data in the form model
+        if (count($formModelDefaults) !== 0)
+        {
+            // We concatenate the configureOptions() method source code
+            $source .= $this->generateFormTypeOptionsPhpSource($formModelDefaults) . "\n";
+        }
+        
+        $source .= '    /**' . "\n";
+        $source .= '      * @return string' . "\n";
+        $source .= '     */' . "\n";
+        $source .= '    public function getName()' . "\n";
+        $source .= '    {' . "\n";
+        $source .= "        return 'form_" . $this->getContainer()->underscore($this->formModelName) . "';" . "\n";
+        $source .= '    }' . "\n";
+        $source .= '}' . "\n";
+        
+        return $source;
+    }
+    
+    /**
+     * Generate the PHP source code for the buildForm() method of the form type class.
+     *
+     * @return string The PHP source code
+     */
+    protected function generateFormTypeBuilderPhpSource()
+    {
+        $source = '';
+
         $source .= '    /**' . "\n";
         $source .= "     * @param FormBuilderInterface \$builder" . "\n";
         $source .= "     * @param array \$options" . "\n";
@@ -280,34 +312,32 @@ class GenerateCommand extends ContainerAwareCommand
         $source .= '        ;' . "\n";
         
         $source .= '    }' . "\n";
-        $source .= "\n";
-        
-        // Setting form type defaults (if some are defined)
-        if (count($formModelDefaults) !== 0)
-        {
-            $source .= '    /**' . "\n";
-            $source .= "     * @param OptionsResolver \$resolver" . "\n";
-            $source .= '     */' . "\n";
-            $source .= "    public function configureOptions(OptionsResolver \$resolver)" . "\n";
-            $source .= '    {' . "\n";
-            $source .= "        \$resolver->setDefaults(array(" . "\n";
-            
-            $source .= PhpGenerator::arrayToPhp($formModelDefaults, 3);
-            
-            $source .= '        ));' . "\n";
-            $source .= '    }' . "\n";
-            $source .= "\n";
-        }
-        
+
+        return $source;
+    }
+
+    /**
+     * Generate the PHP source code for the form configureOptions() method of the form type class.
+     *
+     * @return string The PHP source code
+     */
+    protected function generateFormTypeOptionsPhpSource($formModelDefaults)
+    {
+        $source = '';
+
         $source .= '    /**' . "\n";
-        $source .= '      * @return string' . "\n";
+        $source .= "     * @param OptionsResolver \$resolver" . "\n";
         $source .= '     */' . "\n";
-        $source .= '    public function getName()' . "\n";
+        $source .= "    public function configureOptions(OptionsResolver \$resolver)" . "\n";
         $source .= '    {' . "\n";
-        $source .= "        return 'form_" . $this->getContainer()->underscore($this->formModelName) . "';" . "\n";
+        $source .= "        \$resolver->setDefaults(array(" . "\n";
+
+        $source .= PhpGenerator::arrayToPhp($formModelDefaults, 3);
+
+        $source .= '        ));' . "\n";
         $source .= '    }' . "\n";
-        $source .= '}' . "\n";
-        
+        $source .= "\n";
+
         return $source;
     }
 
@@ -406,7 +436,7 @@ class GenerateCommand extends ContainerAwareCommand
         ));
     
         $entityFilePath = $this->bundlePath . '/Entity/' . $this->formModelName . '.php';
-        $entityFileSource = $this->generateEntityPHPSource();
+        $entityFileSource = $this->generateEntityPhpSource();
     
         // If "Entity" directory doesn't exist, we create it
         if (!file_exists($this->bundlePath . '/Entity'))
@@ -442,7 +472,7 @@ class GenerateCommand extends ContainerAwareCommand
      *
      * @return string The PHP source code
      */
-    protected function generateEntityPHPSource()
+    protected function generateEntityPhpSource()
     {
         $source = '<?php' . "\n\n";
         
