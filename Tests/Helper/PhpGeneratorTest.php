@@ -24,20 +24,24 @@ class PhpGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $result = PhpGenerator::arrayToPhp(array(
             'a' => array(
-                'b' => true,
+                'bt' => true,
+                'bf' => false,
                 'f' => 3.14,
                 'i' => 42,
+                'n' => null,
                 's' => 'Hello PhpGenerator !',
             ),
-            'b' => true,
+            'bt' => true,
+            'bf' => false,
             'f' => 3.14,
             'i' => 42,
+            'n' => null,
             's' => 'Hello PhpGenerator !',
         ), 0, '_EOF_');
 
         // assert that your calculator added the numbers correctly!
         $this->assertEquals(
-            "'a' => array('b' => true, 'f' => 3.14, 'i' => 42, 's' => \"Hello PhpGenerator !\", ),_EOF_'b' => true,_EOF_'f' => 3.14,_EOF_'i' => 42,_EOF_'s' => \"Hello PhpGenerator !\",_EOF_",
+            "'a' => array('bt' => true, 'bf' => false, 'f' => 3.14, 'i' => 42, 'n' => null, 's' => \"Hello PhpGenerator !\", ),_EOF_'bt' => true,_EOF_'bf' => false,_EOF_'f' => 3.14,_EOF_'i' => 42,_EOF_'n' => null,_EOF_'s' => \"Hello PhpGenerator !\",_EOF_",
             $result
         );
     }
