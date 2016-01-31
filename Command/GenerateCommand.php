@@ -1,23 +1,23 @@
 <?php
 
 /*
- * This file is part of the IBLongFormBundle package.
+ * This file is part of the IGLongFormBundle package.
  *
- * (c) Inspired Beings Ltd <http://www.inspired-beings.com>
+ * (c) Ivan Gabriele <http://www.ivangabriele.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace InspiredBeings\LongFormBundle\Command;
+namespace IvanGabriele\LongFormBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use InspiredBeings\LongFormBundle\Helper\PhpGenerator;
-use InspiredBeings\LongFormBundle\Helper\Pluralizer;
+use IvanGabriele\LongFormBundle\Helper\PhpGenerator;
+use IvanGabriele\LongFormBundle\Helper\Pluralizer;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
@@ -45,7 +45,7 @@ class GenerateCommand extends ContainerAwareCommand
         $input,
         $output
     ;
-    
+
     /**
      * {@inheritDoc}
      */
@@ -72,7 +72,7 @@ class GenerateCommand extends ContainerAwareCommand
                 'Update Doctrine Shema (<info>doctrine:schema:update --force</info>)'
             );
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -83,25 +83,25 @@ class GenerateCommand extends ContainerAwareCommand
 
         // We check for command input errors
         $this->checkInput();
-    
+
         // We generate form type file
         $this->generateFormType();
-    
+
         // We generate form template file
         $this->generateTemplate();
-    
+
         // If the "no-entity" option is not set
         if (!$input->getOption('no-entity'))
         {
             // We generate entity file
             $this->generateEntity();
         }
-        
+
         // If shema update option is set to TRUE
         if ($input->getOption('schema-update'))
         {
             $output->writeln('');
-            
+
             // We generate the entities for this entity (via Doctrine)
             $command = $this->getApplication()->find('doctrine:schema:update');
             $commandInput = new ArrayInput(array(
@@ -111,14 +111,14 @@ class GenerateCommand extends ContainerAwareCommand
             $command->run($commandInput, $output);
         }
     }
-    
+
     /**
      * Check command input.
      */
     protected function checkInput()
     {
         $formModelPath = explode(':', $this->input->getArgument('formModel'));
-    
+
         // If the form model path format is correct (Foo:Bar)
         if (count($formModelPath) !== 2)
         {
@@ -127,11 +127,11 @@ class GenerateCommand extends ContainerAwareCommand
                 'Example: <info>php app/console generate:form MyBundle:MyForm</info>',
             ));
         }
-    
+
         // We get the bundle name and the form model name
         $this->bundleName = $formModelPath[0];
         $this->formModelName = $formModelPath[1];
-    
+
         // We try to get the bundle object
         try
         {
@@ -142,11 +142,11 @@ class GenerateCommand extends ContainerAwareCommand
         {
             $this->output->writeln('<error>' . $exception->getMessage() . '</error>');
         }
-    
+
         // We get the bundle name and the form model name
         $this->bundlePath = $bundle->getPath();
         $this->bundleNameSpace = $bundle->getNamespace();
-    
+
         // If the form model name does not only contain letters
         if (!ctype_alpha($this->formModelName))
         {
@@ -155,7 +155,7 @@ class GenerateCommand extends ContainerAwareCommand
                 '<info>Example: if your yaml filename is MyForm.yml (within Form/Model/ directory), the form model path will be ' . $this->bundleName . ':MyForm.</info>',
             ));
         }
-    
+
         // If the first letter is not a capital one
         if (ucfirst($this->formModelName) !== $this->formModelName)
         {
@@ -164,10 +164,10 @@ class GenerateCommand extends ContainerAwareCommand
                 '<info>Maybe ' . $this->bundleName . ':' . ucfirst($this->formModelName) . ' ?</info>',
             ));
         }
-    
+
         // We set the form model yaml file absolute path
         $formModelPath = $this->bundlePath . '/Form/Model/' . $this->formModelName . '.yml';
-    
+
         // If form model yaml file exists
         if (!file_exists($formModelPath))
         {
@@ -176,7 +176,7 @@ class GenerateCommand extends ContainerAwareCommand
                 '<question>Is ' . $this->formModelName . '.yml within the Form/Model/ directory of your bundle ' . $this->bundleName . ' ?</question>',
             ));
         }
-    
+
         // We try to get the yaml source
         try
         {
@@ -188,7 +188,7 @@ class GenerateCommand extends ContainerAwareCommand
             $this->output->writeln('<error>' . $exception->getMessage() . '</error>');
         }
     }
-    
+
     /**
      * Generate the form type file.
      */
@@ -229,16 +229,16 @@ class GenerateCommand extends ContainerAwareCommand
     protected function generateFormTypePhpSource()
     {
         $formModelDefaults = array();
-        
+
         // If defaults array is set and contains some data
         if (isset($this->formModel['defaults']) && is_array($this->formModel['defaults']) && count($this->formModel['defaults']) !== 0)
         {
             $formModelDefaults = $this->formModel['defaults'];
             unset($this->formModel['defaults']);
         }
-        
+
         $source = '<?php' . "\n\n";
-        
+
         $source .= 'namespace ' . $this->bundleNameSpace . '\\Form\\Type;' . "\n\n";
 
         $source .= 'use Symfony\\Component\\Form\\AbstractType;' . "\n";
@@ -257,7 +257,7 @@ class GenerateCommand extends ContainerAwareCommand
             // We concatenate the configureOptions() method source code
             $source .= $this->generateFormTypeOptionsPhpSource($formModelDefaults) . "\n";
         }
-        
+
         $source .= '    /**' . "\n";
         $source .= '      * @return string' . "\n";
         $source .= '     */' . "\n";
@@ -266,10 +266,10 @@ class GenerateCommand extends ContainerAwareCommand
         $source .= "        return 'form_" . $this->getContainer()->underscore($this->formModelName) . "';" . "\n";
         $source .= '    }' . "\n";
         $source .= '}' . "\n";
-        
+
         return $source;
     }
-    
+
     /**
      * Generate the PHP source code for the buildForm() method of the form type class.
      *
@@ -286,29 +286,29 @@ class GenerateCommand extends ContainerAwareCommand
         $source .= "    public function buildForm(FormBuilderInterface \$builder, array \$options)" . "\n";
         $source .= '    {' . "\n";
         $source .= "        \$builder" . "\n";
-        
+
         foreach ($this->formModel as $fieldName => $fieldOptions)
         {
             // By default, field type is "text"
             $fieldType = (isset($fieldOptions['type'])) ? $fieldOptions['type'] : 'text';
             unset($fieldOptions['type']);
-            
+
             $source .= "            ->add('$fieldName', '$fieldType'";
-            
+
             if (count($fieldOptions) !== 0)
             {
                 $source .= ', array(' . "\n";
                 $source .= PhpGenerator::arrayToPhp($fieldOptions);
                 $source .= '            ))' . "\n";
-                
+
                 continue;
             }
-            
+
             $source .= ')' . "\n";
         }
-        
+
         $source .= '        ;' . "\n";
-        
+
         $source .= '    }' . "\n";
 
         return $source;
@@ -348,35 +348,35 @@ class GenerateCommand extends ContainerAwareCommand
             '',
             'Generating form Twig template for form model "' . $this->bundleName . ':' . $this->formModelName . '"',
         ));
-    
+
         $formTemplateFileSource = $this->generateTemplateTwigSource();
         $formTemplateFilePath = $this->bundlePath . '/Resources/views/Form/' . $this->getContainer()->underscore($this->formModelName) . '.html.twig';
-    
+
         // If "Ressources/views/Form" directory doesn't exist, we create it
         if (!file_exists($this->bundlePath . '/Resources/views/Form'))
         {
             $this->output->writeln('  > creating directory ' . $this->bundlePath . '/Resources/views/Form');
-        
+
             if (!file_exists($this->bundlePath . '/Ressources'))
             {
                 mkdir($this->bundlePath . '/Resources');
             }
-        
+
             if (!file_exists($this->bundlePath . '/Ressources/views'))
             {
                 mkdir($this->bundlePath . '/Resources/views');
             }
-        
+
             mkdir($this->bundlePath . '/Resources/views/Form');
         }
-    
+
         // If the form template already exists, we save a copy of it
         if (file_exists($formTemplateFilePath))
         {
             $this->output->writeln('  > backing up ' . $this->getContainer()->underscore($this->formModelName) . '.html.twig to ' . $this->getContainer()->underscore($this->formModelName) . '.html.twig~');
             copy($formTemplateFilePath, $formTemplateFilePath . '~');
         }
-    
+
         // We write the (new) template for this form model
         $this->output->writeln('  > generating ' . $formTemplateFilePath);
         file_put_contents($formTemplateFilePath, $formTemplateFileSource);
@@ -390,7 +390,7 @@ class GenerateCommand extends ContainerAwareCommand
     protected function generateTemplateTwigSource()
     {
         $source = '';
-        
+
         $source .= '{#' . "\n";
         $source .= '    To customize your field blocks, check the Cookbook > How to Customize Form Rendering :' . "\n";
         $source .= '    http://symfony.com/doc/current/cookbook/form/form_customization.html#form-theming' . "\n";
@@ -402,27 +402,27 @@ class GenerateCommand extends ContainerAwareCommand
         $source .= '    {# Form general errors #}' . "\n";
         $source .= '    {{ form_errors(form) }}' . "\n\n";
 
-        
+
         foreach ($this->formModel as $fieldName => $fieldOptions)
         {
             if (isset($fieldOptions['type']) && $fieldOptions['type'] == 'hidden')
             {
                 continue;
             }
-            
+
             $source .= '    {{ form_row(form.' . $fieldName . ') }}' . "\n";
         }
-        
+
         $source .= "\n";
         $source .= '    {# CSRF and hidden fields #}' . "\n";
         $source .= '    {{ form_rest(form) }}' . "\n\n";
 
         $source .= '{# Form closing tag #}' . "\n";
         $source .= '{{ form_end(form) }}' . "\n";
-        
+
         return $source;
     }
-    
+
     /**
      * Generate the entity file.
      */
@@ -432,31 +432,31 @@ class GenerateCommand extends ContainerAwareCommand
             '',
             'Generating entity class for form model "' . $this->bundleName . ':' . $this->formModelName . '"',
         ));
-    
+
         $entityFilePath = $this->bundlePath . '/Entity/' . $this->formModelName . '.php';
         $entityFileSource = $this->generateEntityPhpSource();
-    
+
         // If "Entity" directory doesn't exist, we create it
         if (!file_exists($this->bundlePath . '/Entity'))
         {
             $this->output->writeln('  > creating directory ' . $this->bundlePath . '/Entity');
             mkdir($this->bundlePath . '/Entity');
         }
-    
+
         // If the entity already exists, we save a copy of it
         if (file_exists($entityFilePath))
         {
             $this->output->writeln('  > backing up ' . $this->formModelName . '.php to ' . $this->formModelName . '.php~');
             copy($entityFilePath, $entityFilePath . '~');
         }
-    
+
         // We write the (new) entity for this form model
         $this->output->writeln('  > generating ' . $entityFilePath);
         file_put_contents($entityFilePath, $entityFileSource);
-    
+
         // We generate the entities for this entity (via Doctrine)
         $this->output->writeln('');
-    
+
         $command = $this->getApplication()->find('doctrine:generate:entities');
         $commandInput = new ArrayInput(array(
             'command' => 'doctrine:generate:entities',
@@ -464,7 +464,7 @@ class GenerateCommand extends ContainerAwareCommand
         ));
         $command->run($commandInput, $this->output);
     }
-    
+
     /**
      * Generate the PHP source code for the entity.
      *
@@ -473,11 +473,11 @@ class GenerateCommand extends ContainerAwareCommand
     protected function generateEntityPhpSource()
     {
         $source = '<?php' . "\n\n";
-        
+
         $source .= 'namespace ' . $this->bundleNameSpace . '\\Entity;' . "\n\n";
-        
+
         $source .= 'use Doctrine\\ORM\\Mapping as ORM;' . "\n\n";
-        
+
         $source .= '/**' . "\n";
         $source .= ' * ' . $this->formModelName . "\n";
         $source .= ' *' . "\n";
@@ -496,12 +496,12 @@ class GenerateCommand extends ContainerAwareCommand
         $source .= "    private \$id;" . "\n\n";
 
         $source .= $this->generateEntityPropertiesPhpSource();
-        
+
         $source .= '}' . "\n";
-        
+
         return $source;
     }
-    
+
     /**
      * Generate the PHP source code for the entity properties.
      *
@@ -517,7 +517,7 @@ class GenerateCommand extends ContainerAwareCommand
             {
                 continue;
             }
-            
+
             $source .= '    /**' . "\n";
             $source .= '     * @var string' . "\n";
             $source .= '     *' . "\n";
@@ -528,7 +528,7 @@ class GenerateCommand extends ContainerAwareCommand
 
         return $source;
     }
-    
+
     /**
      * Convert a Symfony form field type into a Doctrine ORM annocation
      * for an entity property (to be converted as a column into the database).
@@ -541,55 +541,55 @@ class GenerateCommand extends ContainerAwareCommand
     protected function formTypeToDoctrineORMType($propertyName, $formFieldType)
     {
         $annotation = '@ORM\\Column(name="' . $this->getContainer()->underscore($propertyName) . '", ';
-        
+
         switch ($formFieldType)
         {
             case 'checkbox':
                 $annotation .= 'type="boolean"';
                 break;
-            
+
             case 'date':
                 $annotation .= 'type="date", nullable=true';
                 break;
-            
+
             case 'birthday':
             case 'datetime':
                 $annotation .= 'type="datetime", nullable=true';
                 break;
-            
+
             case 'integer':
                 $annotation .= 'type="integer", nullable=true';
                 break;
-            
+
             case 'money':
             case 'percent':
                 $annotation .= 'type="decimal", precision=13, scale=2, nullable=true';
                 break;
-            
+
             case 'number':
                 $annotation .= 'type="decimal", precision=21, scale=10, nullable=true';
                 break;
-            
+
             case 'textarea':
                 $annotation .= 'type="text", nullable=true';
                 break;
-            
+
             case 'time':
                 $annotation .= 'type="time", nullable=true';
                 break;
-            
+
             case 'choice':
                 $annotation .= 'type="array"';
                 break;
-            
+
             // country, currency, email, language, locale, password, radio, repeated, search, text, timezone, url AND entity, file, collection
             default:
                 $annotation .= 'type="string", length=255, nullable=true';
                 break;
         }
-        
+
         $annotation .= ')';
-        
+
         return $annotation;
     }
 }

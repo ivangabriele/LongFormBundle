@@ -1,17 +1,17 @@
 <?php
 
 /*
- * This file is part of the IBLongFormBundle package.
+ * This file is part of the IGLongFormBundle package.
  *
- * (c) Inspired Beings Ltd <http://www.inspired-beings.com>
+ * (c) Ivan Gabriele <http://www.ivangabriele.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace InspiredBeings\LongFormBundle\Tests\Helper;
+namespace IvanGabriele\LongFormBundle\Tests\Helper;
 
-use InspiredBeings\LongFormBundle\Helper\Pluralizer;
+use IvanGabriele\LongFormBundle\Helper\Pluralizer;
 
 /**
  * Test Helper/Pluralizer methods.

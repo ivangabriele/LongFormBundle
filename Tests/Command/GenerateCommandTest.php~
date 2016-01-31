@@ -1,11 +1,11 @@
 <?php
 
-namespace InspiredBeings\LongFormBundle\Tests\Command;
+namespace IvanGabriele\LongFormBundle\Tests\Command;
 
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
-use InspiredBeings\LongFormBundle\Command\GenerateCommand;
+use IvanGabriele\LongFormBundle\Command\GenerateCommand;
 
 class GenerateCommandTest extends \PHPUnit_Framework_TestCase
 {

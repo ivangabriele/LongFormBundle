@@ -1,20 +1,15 @@
 {
-    "name": "inspired-beings/long-form-bundle",
+    "name": "ivangabriele/long-form-bundle",
     "type": "symfony-bundle",
     "description": "Symfony bundle auto-generating form type, entity and template files from a simple Yaml form model.",
     "keywords": ["form"],
-    "homepage": "http://www.inspired-beings.com",
+    "homepage": "http://www.ivangabriele.com",
     "license": "MIT",
     "authors": [
         {
             "name": "Ivan Gabriele",
             "email": "ivan.gabriele@gmail.com",
             "homepage": "http://www.ivangabriele.com"
-        },
-        {
-            "name": "Inspired Beings",
-            "email": "contact@inspired-beings.com",
-            "homepage": "http://www.inspired-beings.com"
         }
     ],
     "require": {
@@ -26,8 +21,8 @@
     },
     "autoload": {
         "psr-0": {
-            "InspiredBeings\\LongFormBundle": ""
+            "IvanGabriele\\LongFormBundle": ""
         }
     },
-    "target-dir": "InspiredBeings/LongFormBundle"
+    "target-dir": "IvanGabriele/LongFormBundle"
 }
